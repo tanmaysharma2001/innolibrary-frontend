@@ -5,7 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 const AuthContext = createContext();
 
-const BACKEND_URL = import.meta.env.BACKEND_URL;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", null);
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         password: data.password,
       };
 
-      const response = await fetch(`${BACKEND_URL}/api/login`, {
+      const response = await fetch(`${VITE_BACKEND_URL}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,10 +70,10 @@ export const AuthProvider = ({ children }) => {
       const requestBody = {
         username: data.username,
         password: data.password,
-        confirmPassword: data.confirmPassword,
+        confirm_password: data.confirmPassword,
       };
 
-      const response = await fetch(`${BACKEND_URL}/api/register`, {
+      const response = await fetch(`${VITE_BACKEND_URL}/api/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

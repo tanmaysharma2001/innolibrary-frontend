@@ -21,7 +21,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Book } from "@/lib/types";
 import { useEffect, useState } from "react";
 
-const BACKEND_URL = import.meta.env.BACKEND_URL;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function SearchComponent(props: {
   search: string;
@@ -64,7 +64,7 @@ export default function BookCarousel() {
     // Fetch Books
     const fetchBooks = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/api/books?start=0&n=100`, {
+        const response = await fetch(`${VITE_BACKEND_URL}/api/books?start=0&n=100`, {
           method: "GET",
           headers: {
             Accept: "application/json",
@@ -103,7 +103,7 @@ export default function BookCarousel() {
       const fetchBooksByQuery = async () => {
         try {
           const response = await fetch(
-            `${BACKEND_URL}/api/search?q=${search}`,
+            `${VITE_BACKEND_URL}/api/search?q=${search}`,
             {
               method: "GET",
               headers: {
@@ -131,7 +131,7 @@ export default function BookCarousel() {
   async function handleAddToReadingCollection(bookID: number) {
     try {
       const response = await fetch(
-        `${BACKEND_URL}/api/reads?book_id=${bookID}`,
+        `${VITE_BACKEND_URL}/api/reads?book_id=${bookID}`,
         {
           method: "POST",
           headers: {
