@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error(`Error ${response.status}: ${res.detail}`);
       }
 
-      const user = await response.json();
+      // const user = await response.json();
 
       toast({
         title: `Signup Successfull.`,

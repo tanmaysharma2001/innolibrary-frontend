@@ -41,15 +41,15 @@ function SearchComponent(props: {
   );
 }
 
-function GenreComponent(props: {
-  activeGenre: string;
-  setActiveGenre: string[];
-}) {}
+// function GenreComponent(props: {
+//   activeGenre: string;
+//   setActiveGenre: string[];
+// }) {}
 
 export default function BookCarousel() {
   const [books, setBooks] = useState<Book[]>([]);
-  const [genre, setGenre] = useState<string[]>();
-  const [activeGenre, setActiveGenre] = useState();
+  const [setGenre] = useState<string[]>();
+  // const [activeGenre, setActiveGenre] = useState();
 
   const [search, setSearch] = useState("");
 
