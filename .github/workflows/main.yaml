@@ -28,7 +28,7 @@ jobs:
         run: pnpm install
 
       - name: Lint
-        run:  pnpm run lint -- --quiet
+        run:  pnpm run lint --quiet
 
       - name: Build app
         run: pnpm run build
