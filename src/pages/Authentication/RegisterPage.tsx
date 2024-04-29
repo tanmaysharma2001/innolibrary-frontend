@@ -136,7 +136,7 @@ export const RegisterPage = () => {
                             Password
                           </FormLabel>
                           <FormControl>
-                            <Input placeholder="doe1234" {...field} />
+                            <Input type="password" placeholder="doe1234" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -154,7 +154,7 @@ export const RegisterPage = () => {
                             Confirm Password
                           </FormLabel>
                           <FormControl>
-                            <Input placeholder="doe1234" {...field} />
+                            <Input type="password" placeholder="doe1234" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
