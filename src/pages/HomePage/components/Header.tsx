@@ -28,6 +28,7 @@ export default function Header() {
 
           <div className="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
             <button
+              onClick={() => navigate("/library")}
               className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-5 py-3 text-gray-500 transition hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:ring"
               type="button"
             >

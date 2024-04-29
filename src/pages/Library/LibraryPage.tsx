@@ -33,8 +33,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { Book } from "@/lib/types";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const BACKEND_URL = import.meta.env.BACKEND_URL;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function PersonalBooksSection(props: {
   books: PersonalBook[];
@@ -52,7 +53,7 @@ function PersonalBooksSection(props: {
         status: newStatus,
       };
 
-      const response = await fetch(`${BACKEND_URL}/api/reads`, {
+      const response = await fetch(`${VITE_BACKEND_URL}/api/reads`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +85,7 @@ function PersonalBooksSection(props: {
   async function removeFromReadingList(bookID: number) {
     try {
       const response = await fetch(
-        `${BACKEND_URL}/api/reads?book_id=${bookID}`,
+        `${VITE_BACKEND_URL}/api/reads?book_id=${bookID}`,
         {
           method: "DELETE",
           headers: {
@@ -192,7 +193,46 @@ function PersonalBooksSection(props: {
   );
 }
 
-function RecommendedBooks(props: { books: Book[] }) {
+function RecommendedBooks(props: {
+  books: Book[];
+  setUpdateData: (val: boolean) => void;
+}) {
+  const { user } = useAuth();
+
+  const { toast } = useToast();
+
+  async function handleAddingToLibrary(bookID: number) {
+    try {
+      const response = await fetch(
+        `${VITE_BACKEND_URL}/api/reads?book_id=${bookID}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      props.setUpdateData(true);
+      toast({
+        title: `Book Added Successfully`,
+      });
+      return data;
+    } catch (error) {
+      toast({
+        title: `Adding Book Error:`,
+        variant: "destructive",
+        description: `${(error as Error).message}`,
+      });
+    }
+  }
+
   return (
     <>
       <h2 className="text-start mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
@@ -224,7 +264,11 @@ function RecommendedBooks(props: { books: Book[] }) {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction>Continue</AlertDialogAction>
+                      <AlertDialogAction
+                        onClick={() => handleAddingToLibrary(book.id)}
+                      >
+                        Continue
+                      </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
@@ -262,6 +306,8 @@ export const LibraryPage = () => {
 
   const { toast } = useToast();
 
+  const navigate = useNavigate();
+
   const [updateData, setUpdateData] = useState(false);
 
   useEffect(() => {
@@ -284,7 +330,7 @@ export const LibraryPage = () => {
     }
 
     try {
-      fetchBooks(`${BACKEND_URL}/api/recommend?n=100`).then((data) => {
+      fetchBooks(`${VITE_BACKEND_URL}/api/recommend?n=100`).then((data) => {
         setRecommendedBooks(data);
       });
     } catch (error) {
@@ -296,7 +342,7 @@ export const LibraryPage = () => {
     }
 
     try {
-      fetchBooks(`${BACKEND_URL}/api/reads`).then((data) => {
+      fetchBooks(`${VITE_BACKEND_URL}/api/reads`).then((data) => {
         setPersonalBooks(data);
       });
     } catch (error) {
@@ -318,14 +364,43 @@ export const LibraryPage = () => {
         <h1 className="text-start scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
           {user.username}'s library
         </h1>
-        <Button onClick={handleLogout}>Logout</Button>
+        <div className="flex flex-row space-x-4 items-center">
+          <button
+            onClick={() => navigate("/")}
+            className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-5 py-3 text-gray-500 transition hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:ring"
+            type="button"
+          >
+            <span className="text-sm font-medium">
+              {" "}
+              View latest Collections!{" "}
+            </span>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+          </button>
+          <Button onClick={handleLogout}>Logout</Button>
+        </div>
       </div>
       <PersonalBooksSection
         books={personalBooks}
         setUpdateData={setUpdateData}
       />
-      {/* <BooksSection header={"Recommended Books"} books={personalBooks} /> */}
-      <RecommendedBooks books={recommendedBooks} />
+      <RecommendedBooks
+        books={recommendedBooks}
+        setUpdateData={setUpdateData}
+      />
     </div>
   );
 };
