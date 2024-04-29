@@ -31,7 +31,7 @@ jobs:
         run:  pnpm run lint --quiet --max-warnings 10
 
       - name: Build app
-        run: pnpm run dev
+        run: pnpm run build
 
 
   # deploy:
