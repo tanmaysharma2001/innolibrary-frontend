@@ -7,6 +7,7 @@ export const useLocalStorage = (keyName, defaultValue) => {
       if (value) {
         return JSON.parse(value);
       } else {
+        console.log('jello')
         window.localStorage.setItem(keyName, JSON.stringify(defaultValue));
         return defaultValue;
       }

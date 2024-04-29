@@ -6,10 +6,12 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { LibraryPage } from "@/pages/Library/LibraryPage";
 import { AuthProvider } from "./hooks/useAuth";
 import { RegisterPage } from "./pages/Authentication/RegisterPage";
+import { Toaster } from "@/components/ui/toaster";
 
 function App() {
   return (
     <AuthProvider>
+      <Toaster />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />

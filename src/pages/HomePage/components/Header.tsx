@@ -1,6 +1,16 @@
+import { useAuth } from "@/hooks/useAuth";
 import { BookOpenIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate = useNavigate();
+
+  const { user, logout } = useAuth();
+
+  function handleLogin() {
+    navigate("/login");
+  }
+
   return (
     <header>
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -42,12 +52,23 @@ export default function Header() {
               </svg>
             </button>
 
-            <button
-              className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
-              type="button"
-            >
-              Login
-            </button>
+            {!user ? (
+              <button
+                onClick={handleLogin}
+                className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
+                type="button"
+              >
+                Login
+              </button>
+            ) : (
+              <button
+                onClick={logout}
+                className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
+                type="button"
+              >
+                Logout
+              </button>
+            )}
           </div>
         </div>
       </div>
