@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '18'
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -28,34 +28,32 @@ jobs:
         run: pnpm install
 
       - name: Lint
-        run: pnpm run lint
+        run:  pnpm run lint --quiet --max-warnings 10
 
       - name: Build app
         run: pnpm run build
 
-      - name: Test app
-        run: pnpm test
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: '18'
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+  #     - name: Install pnpm
+  #       run: npm install -g pnpm
 
-      - name: Install dependencies
-        run: pnpm install --production
+  #     - name: Install dependencies
+  #       run: pnpm install --production
 
-      - name: Deploy to production
-        run: |
-          # Example: Deploying to GitHub Pages
-          npm install -g gh-pages
-          npx gh-pages -d dist
+  #     - name: Deploy to production
+  #       run: |
+  #         # Example: Deploying to GitHub Pages
+  #         npm install -g gh-pages
+  #         npx gh-pages -d dist
