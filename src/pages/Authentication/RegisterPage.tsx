@@ -17,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z
   .object({
@@ -57,11 +58,21 @@ export const RegisterPage = () => {
     },
   });
 
+  const { toast } = useToast();
+
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    try {
+      await signup(values);
+    } catch (error) {
+      toast({
+        title: `Login Error:`,
+        variant: "destructive",
+        description: `${(error as Error).message}`,
+      });
+    }
   }
 
   return (

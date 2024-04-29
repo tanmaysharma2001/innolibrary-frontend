@@ -17,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
 
 // const formSchema = z
 //   .object({
@@ -60,6 +61,7 @@ const formSchema = z.object({
 });
 
 export const LoginPage = () => {
+  const { toast } = useToast();
 
   const { login } = useAuth();
 
@@ -67,28 +69,36 @@ export const LoginPage = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
-      password: ""
+      password: "",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    try {
+      await login(values);
+    } catch (error) {
+      toast({
+        title: `Login Error:`,
+        variant: "destructive",
+        description: `${(error as Error).message}`,
+      });
+    }
   }
 
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     // Here you would usually send a request to your backend to authenticate the user
-//     // For the sake of this example, we're using a mock authentication
-//     if (username === "user" && password === "password") {
-//       // Replace with actual authentication logic
-//       await login({ username });
-//     } else {
-//       alert("Invalid username or password");
-//     }
-//   };
+  //   const handleLogin = async (e) => {
+  //     e.preventDefault();
+  //     // Here you would usually send a request to your backend to authenticate the user
+  //     // For the sake of this example, we're using a mock authentication
+  //     if (username === "user" && password === "password") {
+  //       // Replace with actual authentication logic
+  //       await login({ username });
+  //     } else {
+  //       alert("Invalid username or password");
+  //     }
+  //   };
 
   return (
     <div>
@@ -157,32 +167,7 @@ export const LoginPage = () => {
                         </FormItem>
                       )}
                     />
-
-                    {/* <label
-                      htmlFor="Password"
-                      className="block text-start text-lg m-2 font-medium text-gray-700"
-                    >
-                      {" "}
-                      Password{" "}
-                    </label>
-
-                    <Input type="password" id="Password" name="password" /> */}
                   </div>
-
-                  {/* <div className="col-span-6 sm:col-span-3">
-                    <label
-                      htmlFor="PasswordConfirmation"
-                      className="block text-start text-lg m-2 font-medium text-gray-700"
-                    >
-                      Password Confirmation
-                    </label>
-
-                    <Input
-                      type="password"
-                      id="PasswordConfirmation"
-                      name="password_confirmation"
-                    />
-                  </div> */}
 
                   <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                     <button className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
