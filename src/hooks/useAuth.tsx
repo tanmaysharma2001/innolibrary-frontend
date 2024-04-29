@@ -32,17 +32,17 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        const res = await response.json()
+        const res = await response.json();
         throw new Error(`Error ${response.status}: ${res.detail}`);
       }
 
       const user = await response.json();
-      
+
       toast({
         title: `Signin Successfull.`,
         description: `You will be redirected to your Library.`,
       });
-      
+
       setUser(user);
       navigate("/library");
     } catch (error) {
@@ -61,9 +61,46 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Sign Up
-  const signup = async (data) => {
-    setUser(data);
-    navigate("/library");
+  const signup = async (data: {
+    username: string;
+    password: string;
+    confirmPassword: string;
+  }) => {
+    try {
+      const requestBody = {
+        username: data.username,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+      };
+
+      const response = await fetch(`${BACKEND_URL}/api/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        const res = await response.json();
+        throw new Error(`Error ${response.status}: ${res.detail}`);
+      }
+
+      const user = await response.json();
+
+      toast({
+        title: `Signup Successfull.`,
+        description: `You will be redirected to your Login Page.`,
+      });
+
+      navigate("/login");
+    } catch (error) {
+      toast({
+        title: `SignUp Error:`,
+        variant: "destructive",
+        description: `${(error as Error).message}`,
+      });
+    }
   };
 
   const value = useMemo(
