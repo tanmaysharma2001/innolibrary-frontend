@@ -7,15 +7,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Input } from "@/components/ui/input";
+import { Book } from "@/lib/types";
 import { useEffect, useState } from "react";
-
-type Book = {
-  id: number;
-  title: string;
-  author: string;
-  genre: string;
-  reads: number;
-};
 
 function SearchComponent(props: {
   search: string;
@@ -35,9 +28,10 @@ function SearchComponent(props: {
   );
 }
 
-function GenreComponent(props: {activeGenre: string, setActiveGenre: string[]}) {
-    
-}
+function GenreComponent(props: {
+  activeGenre: string;
+  setActiveGenre: string[];
+}) {}
 
 export default function BookCarousel() {
   const [books, setBooks] = useState<Book[]>([]);
